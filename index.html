@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Senha</title>
+    <link rel="stylesheet" href="custom/styles.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <img src="img/lock-logo2.png" alt="Ícone de Cadeado" class="lock-logo">
+        <h2>Gerador de Senha</h2>
+
+        <label for="baseWords">Palavras-chave (opcional):</label>
+        <input type="text" id="baseWords" placeholder="Digite palavras separadas por espaço">
+
+        <label for="length">Tamanho da senha:</label>
+        <input type="number" id="length" min="4" max="30" value="12">
+
+        <label>
+            <input type="checkbox" id="includeUppercase" checked> Incluir Letras Maiúsculas
+        </label>
+        <label>
+            <input type="checkbox" id="includeNumbers"> Incluir Números
+        </label>
+        <label>
+            <input type="checkbox" id="includeSpecial"> Incluir Caracteres Especiais
+        </label>
+
+        <button onclick="generatePassword()">Gerar Senha</button>
+
+        <h3>Senha Gerada:</h3>
+        <div class="password" id="password" onclick="copyPassword()">Clique em "Gerar Senha"</div>
+    </div>
+
+    <script src="js/script.js"></script>
+
+</body>
+
+</html>
