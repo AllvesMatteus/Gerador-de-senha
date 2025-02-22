@@ -108,21 +108,25 @@ h2 {
 }
 
 .lock-logo {
-    width: 100px;
-    height: 100px;
+    width: 85px;
+    height: 85px;
     margin: 0 auto;
 }
 
 .container {
     background: #333;
-    padding: 20px;
+    padding: 15px;
     border-radius: 8px;
-    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+    box-shadow: 0px 0px 4px rgba(255, 255, 255, 0.2);
     text-align: center;
     width: 350px;
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+input{
+    margin-top: -100px;
 }
 
 input,
@@ -144,9 +148,10 @@ input {
 }
 
 button {
-    background: #132F57;
+    background: radial-gradient(at bottom right, #b6b6b6 5%, #888888 95%);
     color: white;
     cursor: pointer;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 button:hover {
@@ -160,6 +165,7 @@ button:hover {
     word-break: break-all;
     border-radius: 5px;
     width: 95%;
+    cursor: pointer;
 }
 
 #baseWords,
