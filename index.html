@@ -1,50 +1,61 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerador de Senha</title>
-    <link rel="stylesheet" href="custom/styles.css">
-    <link rel="stylesheet" href="custom/fonts.css">
-
-    <link rel="shortcut icon" type="image/ico" href="img/ico/16_lock-icon.icon">
-    <link rel="shortcut icon" type="image/ico" href="img/ico/32_lock-icon.ico">
-    <link rel="shortcut icon" type="image/ico" href="img/ico/64_lock-icon.ico">
-    <link rel="shortcut icon" type="image/ico" href="img/ico/128_lock-icon.ico">
-
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/responsive.css">
+    <link rel="stylesheet" href="assets/fonts/fonts.css">
+    <link rel="shortcut icon" type="image/ico" href="assets/icons/16_lock-icon.icon">
+    <link rel="shortcut icon" type="image/ico" href="assets/icons/32_lock-icon.ico">
+    <link rel="shortcut icon" type="image/ico" href="assets/icons/64_lock-icon.ico">
+    <link rel="shortcut icon" type="image/ico" href="assets/icons/128_lock-icon.ico">
+    <script src="assets/js/script.js"></script>
 </head>
 
 <body>
-
     <div class="container">
-        <img src="img/lock-logo.png" alt="Ícone de Cadeado" class="lock-logo">
-        <h2>Gerador de Senha</h2>
+        <div class="content-tittle">
+            <img src="assets/img/lock-logo.png" alt="Ícone de Cadeado" class="lock-logo">
+            <h2>Gerador de <span id="dynamic-word">Senha</span></h2>
+        </div>
+        <div class="content">
+            <label for="baseWords">Palavras-chave (opcional):</label>
+            <input class="keyword-input" type="text" id="baseWords" placeholder="Digite palavras separadas por espaço">
 
-        <label for="baseWords">Palavras-chave (opcional):</label>
-        <input type="text" id="baseWords" placeholder="Digite palavras separadas por espaço">
+            <label for="length">Tamanho da senha:</label>
+            <input class="password-length" type="number" id="length" min="4" max="30" value="12"
+                oninput="evaluatePasswordStrength()">
+            <div id="password-strength" class="password-strength"><span id="strength-label">EXCELENTE</span></div>
 
-        <label for="length">Tamanho da senha:</label>
-        <input type="number" id="length" min="4" max="30" value="12">
-
-        <label>
-            <input type="checkbox" id="includeUppercase" checked> Incluir Letras Maiúsculas
-        </label>
-        <label>
-            <input type="checkbox" id="includeNumbers"> Incluir Números
-        </label>
-        <label>
-            <input type="checkbox" id="includeSpecial"> Incluir Caracteres Especiais
-        </label>
-
-        <button onclick="generatePassword()">Gerar Senha</button>
-
-        <h3>Senha Gerada:</h3>
-        <div class="password" id="password" onclick="copyPassword()">Clique em "Gerar Senha"</div>
+            <label>
+                <input type="checkbox" id="includeUppercase"> Incluir Letras Maiúsculas
+            </label>
+            <label>
+                <input type="checkbox" id="includeNumbers"> Incluir Números
+            </label>
+            <label>
+                <input type="checkbox" id="includeSpecial"> Incluir Caracteres Especiais
+            </label>
+            <label>
+                <input class="onlyNumbers" type="checkbox" id="onlyNumbers"> Somente Números
+            </label>
+            <div class="button-container">
+                <button onclick="generatePassword()" class="button primary">GERAR SENHA</button>
+            </div>
+            <h2 class="generated-password-heading">Senha Gerada:</h2>
+            <div class="password" id="password" onclick="copyPassword()">Clique em "Gerar Senha"</div>
+        </div>
     </div>
-
-    <script src="js/script.js"></script>
-
+    <div class="footer" style="position: fixed; bottom: 0; width: 100%;">
+        <p>Desenvolvido por
+            <a href="https://github.com/AllvesMatteus/Gerador-de-senha" target="_blank">
+                AllvesMatteus <img src="assets/icons/github.png" alt="GitHub">
+            </a>
+        </p>
+    </div>
 </body>
 
 </html>

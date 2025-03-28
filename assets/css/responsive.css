@@ -1,0 +1,25 @@
+@media (max-width: 600px) {
+    body {
+        min-height: 700px;
+        display: flex;
+        flex-direction: column;
+    }
+    .container {
+        max-width: 380px;
+        padding: 50px 25px 50px 15px;
+        margin-bottom: 60px; /* Espaço para o footer */
+    }
+    .footer {
+        position: relative;
+        bottom: 0;
+        width: 100%;
+    }
+}
+
+@media (max-width: 420px) {
+    .container {
+        max-width: 320px;
+        padding: 50px 25px 50px 15px;
+        margin: 250px 0px;
+    }
+}

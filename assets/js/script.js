@@ -4,31 +4,42 @@ function generatePassword() {
     let includeUppercase = document.getElementById("includeUppercase").checked;
     let includeNumbers = document.getElementById("includeNumbers").checked;
     let includeSpecial = document.getElementById("includeSpecial").checked;
+    let onlyNumbers = document.getElementById("onlyNumbers").checked;
 
     let lowercaseLetters = "abcdefghijklmnopqrstuvwxyz";
     let uppercaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     let numbers = "0123456789";
-    let specialChars = "!@#$%^&*-_=+;:,.?/";
+    let specialChars = "!@#$%&*-_=+:,./";
 
-    let allChars = lowercaseLetters;
-    if (includeUppercase) allChars += uppercaseLetters;
-    if (includeNumbers) allChars += numbers;
-    if (includeSpecial) allChars += specialChars;
+    let allChars = onlyNumbers ? numbers : lowercaseLetters;
+    if (!onlyNumbers) {
+        if (includeUppercase) allChars += uppercaseLetters;
+        if (includeNumbers) allChars += numbers;
+        if (includeSpecial) allChars += specialChars;
+    }
+
+    if (onlyNumbers) {
+        baseWords = "";
+    }
 
     let password = "";
 
-    if (baseWords.length > 0) {
+    if (!onlyNumbers && baseWords.length > 0) {
         password = transformBaseWords(baseWords, includeUppercase, includeNumbers, includeSpecial);
     }
 
     while (password.length < length) {
-        let newChar;
-        do {
-            newChar = allChars[Math.floor(Math.random() * allChars.length)];
-        } while (password.includes(newChar) || (password.length > 0 && newChar === password[password.length - 1]));
+        let newChar = allChars[Math.floor(Math.random() * allChars.length)];
+        if (
+            password.length >= 2 &&
+            password[password.length - 1] === newChar &&
+            password[password.length - 2] === newChar &&
+            password[password.length - 3] === newChar
+        ) {
+            continue;
+        }
         password += newChar;
     }
-
 
     password = shuffleString(password.substring(0, length));
 
@@ -38,9 +49,9 @@ function generatePassword() {
 function transformBaseWords(words, includeUppercase, includeNumbers, includeSpecial) {
     let replacements = {
         'a': ['4', '@'], 'A': ['@', '4'],
-        'e': ['3', '€'], 'E': ['€', '3'],
+        'e': ['3'], 'E': ['3'],
         'i': ['1', '!'], 'I': ['!', '1'],
-        'o': ['0', 'Ø'], 'O': ['Ø', '0'],
+        'o': ['0'], 'O': ['0'],
         's': ['$', '5'], 'S': ['5', '$'],
         'g': ['9', 'G'], 't': ['7', 'T']
     };
@@ -68,7 +79,7 @@ function shuffleString(str) {
 
 function copyPassword() {
     const passwordText = document.getElementById("password").textContent;
-    
+
     if (passwordText === "Clique em \"Gerar Senha\"") {
         alert("Gere uma senha primeiro!");
         return;
@@ -81,7 +92,7 @@ function copyPassword() {
         document.body.appendChild(textArea);
         textArea.focus();
         textArea.select();
-        
+
         try {
             const successful = document.execCommand('copy');
             document.body.removeChild(textArea);
@@ -117,6 +128,56 @@ function copyPassword() {
         passwordDiv.textContent = "Senha copiada!";
         setTimeout(() => {
             passwordDiv.textContent = passwordText;
-        }, 1000);
+        }, 2000);
     }
 }
+
+function evaluatePasswordStrength() {
+    const length = parseInt(document.getElementById("length").value);
+    const strengthLabel = document.getElementById("strength-label");
+    const strengthDiv = document.getElementById("password-strength");
+
+    if (length < 7) {
+        strengthLabel.textContent = "RUIM";
+        strengthDiv.style.color = "red";
+    } else if (length >= 8 && length <= 9) {
+        strengthLabel.textContent = "BOA";
+        strengthDiv.style.color = "yellow";
+    } else if (length >= 10 && length <= 11) {
+        strengthLabel.textContent = "MUITO BOA";
+        strengthDiv.style.color = "green";
+    } else if (length >= 12) {
+        strengthLabel.textContent = "EXCELENTE";
+        strengthDiv.style.color = "purple";
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const wordElement = document.getElementById("dynamic-word");
+    const originalWord = "Senha";
+    let currentWord = originalWord;
+    let index = originalWord.length - 1;
+    let addingAsterisks = true;
+
+    function updateWord() {
+        if (addingAsterisks) {
+            currentWord = currentWord.substring(0, index) + "*".repeat(originalWord.length - index);
+            index--;
+            if (index < 0) {
+                addingAsterisks = false;
+                index = 0;
+            }
+        } else {
+            currentWord = originalWord.substring(0, index + 1) + "*".repeat(originalWord.length - index - 1);
+            index++;
+            if (index >= originalWord.length) {
+                addingAsterisks = true;
+                index = originalWord.length - 1;
+            }
+        }
+
+        wordElement.textContent = currentWord;
+    }
+
+    setInterval(updateWord, 400);
+});
