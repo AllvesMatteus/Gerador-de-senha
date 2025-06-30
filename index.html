@@ -1,61 +1,129 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerador de Senha</title>
+    <title>Gerador de Senhas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/responsive.css">
-    <link rel="stylesheet" href="assets/fonts/fonts.css">
-    <link rel="shortcut icon" type="image/ico" href="assets/icons/16_lock-icon.icon">
-    <link rel="shortcut icon" type="image/ico" href="assets/icons/32_lock-icon.ico">
-    <link rel="shortcut icon" type="image/ico" href="assets/icons/64_lock-icon.ico">
-    <link rel="shortcut icon" type="image/ico" href="assets/icons/128_lock-icon.ico">
-    <script src="assets/js/script.js"></script>
+    <link rel="shortcut icon" type="image/ico" href="assets/icon/16_lock-icon.ico">
+    <link rel="shortcut icon" type="image/ico" href="assets/icon/32_lock-icon.ico">
+    <link rel="shortcut icon" type="image/ico" href="assets/icon/64_lock-icon.ico">
+    <link rel="shortcut icon" type="image/ico" href="assets/icon/128_lock-icon.ico">
 </head>
 
 <body>
     <div class="container">
-        <div class="content-tittle">
-            <img src="assets/img/lock-logo.png" alt="Ícone de Cadeado" class="lock-logo">
-            <h2>Gerador de <span id="dynamic-word">Senha</span></h2>
-        </div>
-        <div class="content">
-            <label for="baseWords">Palavras-chave (opcional):</label>
-            <input class="keyword-input" type="text" id="baseWords" placeholder="Digite palavras separadas por espaço">
-
-            <label for="length">Tamanho da senha:</label>
-            <input class="password-length" type="number" id="length" min="4" max="30" value="12"
-                oninput="evaluatePasswordStrength()">
-            <div id="password-strength" class="password-strength"><span id="strength-label">EXCELENTE</span></div>
-
-            <label>
-                <input type="checkbox" id="includeUppercase"> Incluir Letras Maiúsculas
-            </label>
-            <label>
-                <input type="checkbox" id="includeNumbers"> Incluir Números
-            </label>
-            <label>
-                <input type="checkbox" id="includeSpecial"> Incluir Caracteres Especiais
-            </label>
-            <label>
-                <input class="onlyNumbers" type="checkbox" id="onlyNumbers"> Somente Números
-            </label>
-            <div class="button-container">
-                <button onclick="generatePassword()" class="button primary">GERAR SENHA</button>
+        <div class="card">
+            <!-- HEADER -->
+            <div class="header">
+                <div class="lock-icon">
+                    <img src="assets/img/lock-logo.png" alt="Cadeado">
+                </div>
+                <h1>Gerador de Senha</h1>
+                <p>Gere senhas fortes e seguras</p>
             </div>
-            <h2 class="generated-password-heading">Senha Gerada:</h2>
-            <div class="password" id="password" onclick="copyPassword()">Clique em "Gerar Senha"</div>
+
+            <div class="main-content">
+                <!-- MAIN -->
+                <div class="keywords-container">
+                    <label for="keywords" class="keywords-label">
+                        Palavras-chave <span style="font-weight:normal;">(Opcional, separadas por espaço)</span>:
+                    </label>
+                    <textarea id="keywords" class="keywords-textarea"
+                        placeholder="Ex: Banana azul foguete Jose"></textarea>
+                </div>
+
+                <div class="length-container">
+                    <label for="length" class="length-label">
+                        Tamanho da Senha: <span id="lengthValue" class="length-value">12</span>
+                    </label>
+                    <input type="range" id="length" min="4" max="30" value="12" class="w-full">
+                </div>
+
+                <div class="strength-container">
+                    <div class="strength-header">
+                        <span class="strength-label">Força:</span>
+                        <span id="strengthText" class="strength-value">Média</span>
+                    </div>
+                    <div class="strength-indicator">
+                        <div id="strengthBar" class="strength-bar"></div>
+                    </div>
+                </div>
+
+                <div class="options-container">
+                    <label class="checkbox-container">
+                        <span class="option-tooltip">Letras maiúsculas aumentam a força da senha</span>
+                        <input type="checkbox" id="uppercase" checked class="hidden">
+                        <span class="checkbox-custom">
+                            <i class="fas fa-check"></i>
+                        </span>
+                        <span class="checkbox-label">Incluir Letras Maiúsculas (A-Z)</span>
+                    </label>
+
+                    <label class="checkbox-container">
+                        <span class="option-tooltip">Letras minúsculas deixam a senha mais variada</span>
+                        <input type="checkbox" id="lowercase" checked class="hidden">
+                        <span class="checkbox-custom">
+                            <i class="fas fa-check"></i>
+                        </span>
+                        <span class="checkbox-label">Incluir Letras Minúsculas (a-z)</span>
+                    </label>
+
+                    <label class="checkbox-container">
+                        <span class="option-tooltip">Números dificultam ataques de força bruta</span>
+                        <input type="checkbox" id="numbers" checked class="hidden">
+                        <span class="checkbox-custom">
+                            <i class="fas fa-check"></i>
+                        </span>
+                        <span class="checkbox-label">Incluir Números (0-9)</span>
+                    </label>
+
+                    <label class="checkbox-container">
+                        <span class="option-tooltip">Símbolos tornam a senha ainda mais segura</span>
+                        <input type="checkbox" id="symbols" checked class="hidden">
+                        <span class="checkbox-custom">
+                            <i class="fas fa-check"></i>
+                        </span>
+                        <span class="checkbox-label">Incluir Símbolos (!@#$%^&*)</span>
+                    </label>
+                </div>
+                <button id="btnGenerate" class="btnGenerate">
+                    <i class="fas fa-key"></i> Gerar Senha
+                </button>
+
+                <div class="password-display-container">
+                    <div class="password-display">
+                        <span id="passwordOutput">Clique em "Gerar" para criar Senha</span>
+                        <div class="tooltip">
+                            <button id="btnCopy" class="btnCopy">
+                                <i class="far fa-copy copy-icon"></i>
+                                <i class="fas fa-check check-icon" style="display: none;"></i>
+                            </button>
+                            <span class="tooltip-text">Copiar para Área de Transferência</span>
+                            <span class="copy-confirmation">Senha copiada com sucesso!</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FOOTER -->
+            <div class="footer">
+                <p class="mb-2">
+                    Gere senhas com segurança. Nada é armazenado ou transmitido
+                </p>
+                <p>
+                    Desenvolvido por <a href="https://github.com/AllvesMatteus/Gerador-de-senha" class="github-link"
+                        target="_blank">AllvesMatteus</a>
+                    <span><i class="fab fa-github"></i></span>
+                </p>
+            </div>
         </div>
     </div>
-    <div class="footer" style="position: fixed; bottom: 0; width: 100%;">
-        <p>Desenvolvido por
-            <a href="https://github.com/AllvesMatteus/Gerador-de-senha" target="_blank">
-                AllvesMatteus <img src="assets/icons/github.png" alt="GitHub">
-            </a>
-        </p>
-    </div>
+
+    <script src="assets/js/script.js"></script>
 </body>
 
 </html>

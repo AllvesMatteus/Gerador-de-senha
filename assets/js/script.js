@@ -1,183 +1,248 @@
-function generatePassword() {
-    let baseWords = document.getElementById("baseWords").value.trim();
-    let length = parseInt(document.getElementById("length").value);
-    let includeUppercase = document.getElementById("includeUppercase").checked;
-    let includeNumbers = document.getElementById("includeNumbers").checked;
-    let includeSpecial = document.getElementById("includeSpecial").checked;
-    let onlyNumbers = document.getElementById("onlyNumbers").checked;
+document.addEventListener('DOMContentLoaded', function () {
+    const lengthSlider = document.getElementById('length');
+    const lengthValue = document.getElementById('lengthValue');
+    const uppercaseCheckbox = document.getElementById('uppercase');
+    const lowercaseCheckbox = document.getElementById('lowercase');
+    const numbersCheckbox = document.getElementById('numbers');
+    const symbolsCheckbox = document.getElementById('symbols');
+    const btnGenerate = document.getElementById('btnGenerate');
+    const passwordOutput = document.getElementById('passwordOutput');
+    const btnCopy = document.getElementById('btnCopy');
+    const strengthBar = document.getElementById('strengthBar');
+    const strengthText = document.getElementById('strengthText');
+    const keywordsInput = document.getElementById('keywords');
+    const passwordDisplay = document.querySelector('.password-display');
 
-    let lowercaseLetters = "abcdefghijklmnopqrstuvwxyz";
-    let uppercaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    let numbers = "0123456789";
-    let specialChars = "!@#$%&*-_=+:,./";
+    const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
+    const numberChars = '0123456789';
+    const symbolChars = '!@#$%*_+-=.<>?';
 
-    let allChars = onlyNumbers ? numbers : lowercaseLetters;
-    if (!onlyNumbers) {
-        if (includeUppercase) allChars += uppercaseLetters;
-        if (includeNumbers) allChars += numbers;
-        if (includeSpecial) allChars += specialChars;
-    }
+    // Sistema de Tooltips Aprimorado
+    class SmartTooltip {
+        constructor(container) {
+            this.container = container;
+            this.tooltip = container.querySelector('.option-tooltip');
+            this.timeout = null;
+            this.delay = 3000;
 
-    if (onlyNumbers) {
-        baseWords = "";
-    }
-
-    let password = "";
-
-    if (!onlyNumbers && baseWords.length > 0) {
-        password = transformBaseWords(baseWords, includeUppercase, includeNumbers, includeSpecial);
-    }
-
-    while (password.length < length) {
-        let newChar = allChars[Math.floor(Math.random() * allChars.length)];
-        if (
-            password.length >= 2 &&
-            password[password.length - 1] === newChar &&
-            password[password.length - 2] === newChar &&
-            password[password.length - 3] === newChar
-        ) {
-            continue;
-        }
-        password += newChar;
-    }
-
-    password = shuffleString(password.substring(0, length));
-
-    document.getElementById("password").textContent = password;
-}
-
-function transformBaseWords(words, includeUppercase, includeNumbers, includeSpecial) {
-    let replacements = {
-        'a': ['4', '@'], 'A': ['@', '4'],
-        'e': ['3'], 'E': ['3'],
-        'i': ['1', '!'], 'I': ['!', '1'],
-        'o': ['0'], 'O': ['0'],
-        's': ['$', '5'], 'S': ['5', '$'],
-        'g': ['9', 'G'], 't': ['7', 'T']
-    };
-
-    let transformed = words.replace(/\s+/g, '').split("").map(char => {
-        if (replacements[char]) {
-            let options = replacements[char];
-
-            if (!includeNumbers) options = options.filter(c => isNaN(c));
-            if (!includeSpecial) options = options.filter(c => /^[a-zA-Z0-9]+$/.test(c));
-
-            let newChar = options.length > 0 ? options[Math.floor(Math.random() * options.length)] : char;
-            return includeUppercase ? newChar : newChar.toLowerCase();
+            this.tooltip.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+            this.setupEvents();
         }
 
-        return includeUppercase ? char : char.toLowerCase();
-    }).join("");
+        setupEvents() {
+            this.container.addEventListener('click', () => this.show());
+            this.container.addEventListener('mouseenter', () => this.show());
+            this.container.addEventListener('mouseleave', () => this.hide());
 
-    return shuffleString(transformed);
-}
-
-function shuffleString(str) {
-    return str.split("").sort(() => Math.random() - 0.5).join("");
-}
-
-function copyPassword() {
-    const passwordText = document.getElementById("password").textContent;
-
-    if (passwordText === "Clique em \"Gerar Senha\"") {
-        alert("Gere uma senha primeiro!");
-        return;
-    }
-
-    function fallbackCopyTextToClipboard(text) {
-        const textArea = document.createElement("textarea");
-        textArea.value = text;
-        textArea.style.position = "fixed";
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-
-        try {
-            const successful = document.execCommand('copy');
-            document.body.removeChild(textArea);
-            return successful;
-        } catch (err) {
-            document.body.removeChild(textArea);
-            return false;
-        }
-    }
-
-    if (navigator.clipboard) {
-        navigator.clipboard.writeText(passwordText)
-            .then(() => {
-                showCopyFeedback();
-            })
-            .catch(() => {
-                if (!fallbackCopyTextToClipboard(passwordText)) {
-                    alert("Erro ao copiar a senha. Tente novamente.");
-                } else {
-                    showCopyFeedback();
+            document.addEventListener('touchstart', (e) => {
+                if (!this.container.contains(e.target)) {
+                    this.hide();
                 }
             });
-    } else {
-        if (!fallbackCopyTextToClipboard(passwordText)) {
-            alert("Erro ao copiar a senha. Tente novamente.");
-        } else {
-            showCopyFeedback();
+        }
+
+        show() {
+            if (this.timeout) clearTimeout(this.timeout);
+
+            this.tooltip.style.opacity = '0';
+            this.tooltip.style.transform = 'translateY(10px)';
+            void this.tooltip.offsetWidth;
+
+            this.tooltip.style.opacity = '1';
+            this.tooltip.style.transform = 'translateY(0)';
+            this.container.classList.add('show-tooltip');
+
+            this.timeout = setTimeout(() => this.hide(), this.delay);
+        }
+
+        hide() {
+            if (this.timeout) clearTimeout(this.timeout);
+
+            this.tooltip.style.opacity = '0';
+            this.tooltip.style.transform = 'translateY(10px)';
+
+            setTimeout(() => {
+                this.container.classList.remove('show-tooltip');
+            }, 300);
         }
     }
 
-    function showCopyFeedback() {
-        const passwordDiv = document.getElementById("password");
-        passwordDiv.textContent = "Senha copiada!";
-        setTimeout(() => {
-            passwordDiv.textContent = passwordText;
-        }, 2000);
-    }
-}
+    // Inicializa todos os tooltips das opções
+    document.querySelectorAll('.checkbox-container').forEach(container => {
+        new SmartTooltip(container);
+    });
 
-function evaluatePasswordStrength() {
-    const length = parseInt(document.getElementById("length").value);
-    const strengthLabel = document.getElementById("strength-label");
-    const strengthDiv = document.getElementById("password-strength");
+    // Event Listeners
+    lengthSlider.addEventListener('input', function () {
+        lengthValue.textContent = this.value;
+        updateStrengthIndicator();
+    });
 
-    if (length < 7) {
-        strengthLabel.textContent = "RUIM";
-        strengthDiv.style.color = "red";
-    } else if (length >= 8 && length <= 9) {
-        strengthLabel.textContent = "BOA";
-        strengthDiv.style.color = "yellow";
-    } else if (length >= 10 && length <= 11) {
-        strengthLabel.textContent = "MUITO BOA";
-        strengthDiv.style.color = "green";
-    } else if (length >= 12) {
-        strengthLabel.textContent = "EXCELENTE";
-        strengthDiv.style.color = "purple";
-    }
-}
+    [uppercaseCheckbox, lowercaseCheckbox, numbersCheckbox, symbolsCheckbox].forEach(checkbox => {
+        checkbox.addEventListener('change', updateStrengthIndicator);
+    });
 
-document.addEventListener("DOMContentLoaded", () => {
-    const wordElement = document.getElementById("dynamic-word");
-    const originalWord = "Senha";
-    let currentWord = originalWord;
-    let index = originalWord.length - 1;
-    let addingAsterisks = true;
+    btnGenerate.addEventListener('click', generatePassword);
+    btnCopy.addEventListener('click', copyPassword);
+    passwordDisplay.addEventListener('click', function (e) {
+        if (e.target.closest('.btnCopy')) return;
+        copyPassword();
+    });
 
-    function updateWord() {
-        if (addingAsterisks) {
-            currentWord = currentWord.substring(0, index) + "*".repeat(originalWord.length - index);
-            index--;
-            if (index < 0) {
-                addingAsterisks = false;
-                index = 0;
-            }
-        } else {
-            currentWord = originalWord.substring(0, index + 1) + "*".repeat(originalWord.length - index - 1);
-            index++;
-            if (index >= originalWord.length) {
-                addingAsterisks = true;
-                index = originalWord.length - 1;
-            }
+    function generatePassword() {
+        let chars = '';
+        let password = '';
+        const keywords = keywordsInput.value.trim();
+        let keywordChars = '';
+
+        if (uppercaseCheckbox.checked) chars += uppercaseChars;
+        if (lowercaseCheckbox.checked) chars += lowercaseChars;
+        if (numbersCheckbox.checked) chars += numberChars;
+        if (symbolsCheckbox.checked) chars += symbolChars;
+
+        if (chars === '') {
+            chars = uppercaseChars + lowercaseChars + numberChars + symbolChars;
+            uppercaseCheckbox.checked = true;
+            lowercaseCheckbox.checked = true;
+            numbersCheckbox.checked = true;
+            symbolsCheckbox.checked = true;
         }
 
-        wordElement.textContent = currentWord;
+        if (keywords) {
+            keywordChars = keywords.split(/\s+/)
+                .map(part => part.replace(/[^a-zA-Z0-9]/g, ''))
+                .join('')
+                .split('')
+                .filter(char => chars.includes(char) || chars.includes(char.toLowerCase()) || chars.includes(char.toUpperCase()))
+                .join('');
+        }
+
+        const passwordLength = parseInt(lengthSlider.value);
+        let allChars = [];
+
+        if (uppercaseCheckbox.checked) allChars.push(uppercaseChars[Math.floor(Math.random() * uppercaseChars.length)]);
+        if (lowercaseCheckbox.checked) allChars.push(lowercaseChars[Math.floor(Math.random() * lowercaseChars.length)]);
+        if (numbersCheckbox.checked) allChars.push(numberChars[Math.floor(Math.random() * numberChars.length)]);
+        if (symbolsCheckbox.checked) allChars.push(symbolChars[Math.floor(Math.random() * symbolChars.length)]);
+
+        while (allChars.length < passwordLength) {
+            let nextChar;
+            let lastChar = allChars.length > 0 ? allChars[allChars.length - 1] : null;
+            let isDuplicate;
+
+            do {
+                if (keywordChars && Math.random() < 0.8) {
+                    const idx = Math.floor(Math.random() * keywordChars.length);
+                    nextChar = keywordChars[idx];
+                } else {
+                    const idx = Math.floor(Math.random() * chars.length);
+                    nextChar = chars[idx];
+                }
+
+                isDuplicate = lastChar !== null && nextChar.toLowerCase() === lastChar.toLowerCase();
+
+            } while (isDuplicate);
+
+            allChars.push(nextChar);
+        }
+
+        password = allChars.sort(() => 0.5 - Math.random()).join('').substring(0, passwordLength);
+        passwordOutput.textContent = password;
+        updateStrengthIndicator();
     }
 
-    setInterval(updateWord, 400);
+    function copyPassword() {
+        if (passwordOutput.textContent === 'Clique em "Gerar Senha"') return;
+
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(passwordOutput.textContent)
+                .then(showFeedback)
+                .catch(fallbackCopy);
+        } else {
+            fallbackCopy();
+        }
+
+        function showFeedback() {
+            const copyIcon = btnCopy.querySelector('.copy-icon');
+            const checkIcon = btnCopy.querySelector('.check-icon');
+
+            if (copyIcon) {
+                copyIcon.style.display = 'none';
+            }
+            if (checkIcon) {
+                checkIcon.style.display = '';
+            }
+
+            setTimeout(() => {
+                if (checkIcon) {
+                    checkIcon.style.display = 'none';
+                }
+                if (copyIcon) {
+                    copyIcon.style.display = '';
+                }
+            }, 2000);
+        }
+
+        function fallbackCopy() {
+            const tempInput = document.createElement('input');
+            tempInput.value = passwordOutput.textContent;
+            tempInput.setAttribute('readonly', '');
+            tempInput.style.position = 'absolute';
+            tempInput.style.left = '-9999px';
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            tempInput.setSelectionRange(0, 99999);
+            let successful = false;
+            try {
+                successful = document.execCommand('copy');
+            } catch (err) { }
+            document.body.removeChild(tempInput);
+            if (successful) {
+                showFeedback();
+            } else {
+                const originalIconHTML = '<i class="far fa-copy copy-icon"></i><i class="fas fa-check check-icon" style="display: none;"></i>'; // Definir explicitamente para fallback também
+                btnCopy.innerHTML = '<i class="fas fa-times"></i>'; // Ícone de erro temporário
+                setTimeout(() => {
+                    btnCopy.innerHTML = originalIconHTML;
+                }, 2000);
+            }
+        }
+    }
+
+    function updateStrengthIndicator() {
+        const length = parseInt(lengthSlider.value);
+        let strengthScore = 0;
+
+        if (length >= 12) {
+            strengthScore += 20;
+        } else {
+            strengthScore += Math.max(0, (length - 4) / 8 * 20);
+        }
+
+        if (uppercaseCheckbox.checked) strengthScore += 20;
+        if (lowercaseCheckbox.checked) strengthScore += 20;
+        if (numbersCheckbox.checked) strengthScore += 20;
+        if (symbolsCheckbox.checked) strengthScore += 20;
+
+        strengthScore = Math.min(100, strengthScore);
+        strengthBar.style.width = strengthScore + '%';
+
+        if (strengthScore <= 40) {
+            strengthText.textContent = 'Fraca';
+            strengthBar.style.background = 'var(--fraca)';
+            strengthText.style.color = 'var(--fraca)';
+        } else if (strengthScore <= 80) {
+            strengthText.textContent = 'Média';
+            strengthBar.style.background = 'var(--media)';
+            strengthText.style.color = 'var(--media)';
+        } else {
+            strengthText.textContent = 'Forte';
+            strengthBar.style.background = 'var(--forte)';
+            strengthText.style.color = 'var(--forte)';
+        }
+    }
+
+    // Gera uma senha inicial ao carregar
+    generatePassword();
 });

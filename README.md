@@ -1,78 +1,82 @@
-# Gerador de Senha
+# 🔐 Gerador de Senhas
 
-Este é um projeto simples de um gerador de senhas desenvolvido em HTML, CSS e JavaScript. Ele permite que os usuários gerem senhas seguras personalizadas com base em diferentes critérios, como tamanho, inclusão de letras maiúsculas, números e caracteres especiais.
+Este é um projeto de **Gerador de Senhas** responsivo, criado com **HTML**, **CSS** e **JavaScript**, que permite ao usuário gerar senhas fortes e seguras de forma simples e rápida.
 
 ## Funcionalidades
 
-- Geração de senhas com tamanho personalizado.
-- Opção de incluir letras maiúsculas, números e caracteres especiais.
-- Possibilidade de adicionar palavras-chave para personalizar a senha.
-- Avaliação da força da senha com base no tamanho.
-- Animação dinâmica no título da página.
-- Interface amigável e responsiva.
+- Geração de senhas personalizadas.
+- Opção de incluir letras maiúsculas, minúsculas, números e símbolos.
+- Campo opcional para inserir palavras-chave que podem compor a senha.
+- Definição do tamanho da senha (entre 4 e 30 caracteres).
+- Indicador de força da senha com feedback visual (Fraca, Média, Forte).
+- Botão para copiar a senha gerada diretamente para a área de transferência.
+- Interface moderna e responsiva, adaptável a dispositivos móveis.
 
-## Como Usar
+## Interface
 
-1. Abra o arquivo `index.html` em um navegador.
-2. Insira palavras-chave (opcional).
-3. Escolha o tamanho da senha.
-4. Marque as opções desejadas:
-   - Incluir letras maiúsculas.
-   - Incluir números.
-   - Incluir caracteres especiais.
-   - Somente números.
-5. Clique no botão **Gerar Senha**.
-6. A senha gerada será exibida. Clique nela para copiá-la.
+A interface é composta por:
 
-## Tecnologias Utilizadas
+- **Cabeçalho:** título e ícone de cadeado.
+- **Formulário:** opções para selecionar o tipo de caracteres, tamanho da senha e palavras-chave.
+- **Indicador de força:** barra de progresso com cores e texto.
+- **Botões:** gerar e copiar senha.
+- **Rodapé:** informações sobre segurança e link para o GitHub.
 
-- **HTML5**: Estrutura do projeto.
-- **CSS3**: Estilização e design responsivo.
-- **JavaScript**: Lógica para geração de senhas e interatividade.
+## 🛠️ Tecnologias utilizadas
 
-## Estrutura do Projeto
+- **HTML5:** estruturação do conteúdo.
+- **CSS3:** estilização com foco em responsividade e acessibilidade.
+- **JavaScript:** lógica para geração da senha, cálculo de força e interação com o usuário.
+- **Font Awesome:** ícones visuais para melhor usabilidade.
+
+## 🗂️ Estrutura de pastas
 
 ```
-Gerador de senha/
-├── index.html
-├── assets/
-│   ├── css/
-│   │   ├── styles.css
+├── assets
+│   ├── css
 │   │   ├── responsive.css
-│   ├── fonts/
-│   │   ├── montserrat/
-│   │   │   ├── montserrat-100.woff2
-│   │   │   ├── montserrat-100italic.woff2
-│   │   │   ├── montserrat-200.woff2
-│   │   │   ├── montserrat-200italic.woff2
-│   │   │   ├── montserrat-300.woff2
-│   │   │   ├── montserrat-300italic.woff2
-│   │   │   ├── montserrat-regular.woff2
-│   │   │   ├── montserrat-italic.woff2
-│   │   │   ├── montserrat-500.woff2
-│   │   │   ├── montserrat-500italic.woff2
-│   │   │   ├── montserrat-600.woff2
-│   │   │   ├── montserrat-600italic.woff2
-│   │   │   ├── montserrat-700.woff2
-│   │   │   ├── montserrat-700italic.woff2
-│   │   │   ├── montserrat-800.woff2
-│   │   │   ├── montserrat-800italic.woff2
-│   │   │   ├── montserrat-900.woff2
-│   │   │   └── montserrat-900italic.woff2
-│   │   └── fonts.css
-│   ├── img/
-│   │   ├── lock-logo.png
-│   ├── icons/
-│   │   ├── 16_lock-icon.icon
+│   │   └── style.css
+│   ├── icon
+│   │   ├── 16_lock-icon.ico
 │   │   ├── 32_lock-icon.ico
 │   │   ├── 64_lock-icon.ico
-│   │   ├── 128_lock-icon.ico
-│   │   └── github.png
-│   └── js/
+│   │   └── 128_lock-icon.ico
+│   ├── img
+│   │   └── lock-logo.png
+│   └── js
 │       └── script.js
+├── index.html
 └── README.md
 ```
 
-## Licença
+## 🚀 Como usar
 
-Este projeto é de uso livre para fins educacionais e pessoais.
+1. **Clone o repositório:**
+
+```bash
+git clone https://github.com/AllvesMatteus/Gerador-de-senha.git
+```
+
+2. **Abra o arquivo `index.html`** no seu navegador de preferência.
+
+3. **Configure as opções:**
+
+   - Defina o comprimento da senha.
+   - Escolha se quer incluir letras, números e/ou símbolos.
+   - (Opcional) Insira palavras-chave.
+
+4. **Clique em "Gerar Senha"** e, se quiser, copie facilmente para a área de transferência.
+
+## Demonstração
+
+Acesse o site online em: [Gerador de senha](https://allvesmatteus.github.io/Gerador-de-senha/)  
+Ou visualize localmente para experimentar.
+
+## ❗ Segurança
+
+- Nenhuma informação ou senha gerada é armazenada ou transmitida.
+- Tudo acontece de forma **local** no navegador.
+
+## 👨‍💻 Autor
+
+Desenvolvido por [AllvesMatteus](https://github.com/AllvesMatteus).
